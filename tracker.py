@@ -5,7 +5,7 @@ import csv
 from datetime import datetime
 
 FILE = "data.csv"
-TARGET = 2000000000  # Target Porsche (2M)
+TARGET = 1000000000  # Target Porsche (2M)
 
 # ========================
 # FUNGSI DATA
