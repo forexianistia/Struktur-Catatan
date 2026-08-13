@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Portal & Lobby</title>
+    <!-- FontAwesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Lobby Grid Menu */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        /* Kotak Putih Teks Hitam & Hover/Touch Kuning Cerah */
+        .menu-card {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .menu-card:hover, .menu-card:active {
+            background-color: #ffee00; /* Warna Cerah Kuning */
+            color: #000000;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 238, 0, 0.4);
+            border-color: #ffd700;
+        }
+
+        /* Modal / Pop-up Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            border-bottom: 2px solid #ffee00;
+            padding-bottom: 8px;
+        }
+
+        /* Responsive Video Container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Form Controls */
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button.btn-submit {
+            background-color: #ffee00;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button.btn-submit:hover {
+            background-color: #e6d700;
+        }
+
+        .review-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #ffee00;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1><i class="fa-solid fa-mosque"></i> Portal Lobby Islami & Fitur</h1>
+        
+        <div class="menu-grid">
+            <div class="menu-card" onclick="openModal('modal-hadist')">
+                <i class="fa-solid fa-book-open"></i> Hadist Nabi 1-500
+            </div>
+            <div class="menu-card" onclick="openModal('modal-quran')">
+                <i class="fa-solid fa-quran"></i> Al-Quran 1-30 Juz
+            </div>
+            <div class="menu-card" onclick="openModal('modal-motivasi')">
+                <i class="fa-solid fa-quote-left"></i> Kata-Kata Motivasi Islam
+            </div>
+            <div class="menu-card" onclick="openModal('modal-ceramah')">
+                <i class="fa-solid fa-video"></i> Ceramah Video
+            </div>
+            <div class="menu-card" onclick="openModal('modal-buku')">
+                <i class="fa-solid fa-pen-to-square"></i> Buku Tulis
+            </div>
+            <div class="menu-card" onclick="openModal('modal-keuangan')">
+                <i class="fa-solid fa-wallet"></i> Menabung & Atur Uang
+            </div>
+            <div class="menu-card" onclick="openModal('modal-ulasan')">
+                <i class="fa-solid fa-star"></i> Ulasan Web
+            </div>
+            <a href="https://saweria.co" target="_blank" class="menu-card">
+                <i class="fa-solid fa-hand-holding-dollar"></i> Link Donate
+            </a>
+            <a href="https://discord.gg" target="_blank" class="menu-card">
+                <i class="fa-brands fa-discord"></i> Link Discord
+            </a>
+            <a href="https://chat.whatsapp.com" target="_blank" class="menu-card">
+                <i class="fa-brands fa-whatsapp"></i> Link WA Group
+            </a>
+        </div>
+    </div>
+
+    <!-- MODAL HADIST -->
+    <div id="modal-hadist" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-hadist')">&times;</span>
+            <h2 class="modal-title">Hadist Nabi (1-500)</h2>
+            <p><strong>Hadist #1:</strong> "Niat adalah landasan setiap amal perbuatan..." (HR. Bukhari & Muslim)</p>
+            <br>
+            <p><em>Fitur pencarian atau daftar hadist 1-500 dapat dimuat lengkap melalui API Hadist.</em></p>
+        </div>
+    </div>
+
+    <!-- MODAL QURAN -->
+    <div id="modal-quran" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-quran')">&times;</span>
+            <h2 class="modal-title">Al-Quran 1-30 Juz</h2>
+            <label for="juz-select">Pilih Juz:</label>
+            <select id="juz-select">
+                <option>Juz 1 (Al-Fatihah - Al-Baqarah 141)</option>
+                <option>Juz 2 (Al-Baqarah 142 - 252)</option>
+                <option>Juz 3 (Al-Baqarah 253 - Ali 'Imran 92)</option>
+                <!-- Opsi Juz 4 sampai 30 -->
+            </select>
+            <p style="margin-top: 15px;">Daftar surah dan bacaan ayat akan ditampilkan di sini secara otomatis.</p>
+        </div>
+    </div>
+
+    <!-- MODAL MOTIVASI -->
+    <div id="modal-motivasi" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-motivasi')">&times;</span>
+            <h2 class="modal-title">Kata-Kata Motivasi Islam</h2>
+            <blockquote id="quote-box" style="font-size: 1.2rem; font-style: italic; margin-bottom: 15px;">
+                "Maka sesungguhnya bersama kesulitan ada kemudahan." (QS. Al-Insyirah: 5)
+            </blockquote>
+            <button class="btn-submit" onclick="generateQuote()">Acak Quotes</button>
+        </div>
+    </div>
+
+    <!-- MODAL CERAMAH VIDEO -->
+    <div id="modal-ceramah" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-ceramah')">&times;</span>
+            <h2 class="modal-title">Ceramah Video</h2>
+            <p>Saksikan tayangan ceramah pilihan di bawah ini:</p>
+            <div class="video-container">
+                <!-- Ganti src dengan embed URL YouTube pilihan kamu -->
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video Ceramah" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL BUKU TULIS -->
+    <div id="modal-buku" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-buku')">&times;</span>
+            <h2 class="modal-title">Buku Tulis Catatan</h2>
+            <textarea id="note-input" rows="8" placeholder="Ketik catatan harian atau materi kamu di sini..."></textarea>
+            <button class="btn-submit" onclick="saveNote()">Simpan Catatan</button>
+        </div>
+    </div>
+
+    <!-- MODAL MENABUNG & ATUR UANG -->
+    <div id="modal-keuangan" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-keuangan')">&times;</span>
+            <h2 class="modal-title">Menabung & Atur Uang</h2>
+            <p><strong>Total Tabungan Saat Ini:</strong> Rp <span id="total-uang">0</span></p>
+            <br>
+            <input type="number" id="input-uang" placeholder="Masukkan jumlah uang (Rp)">
+            <button class="btn-submit" onclick="tambahUang()">Tambah Tabungan</button>
+            <button class="btn-submit" style="background-color: #ff4d4d; color: white;" onclick="resetUang()">Reset</button>
+        </div>
+    </div>
+
+    <!-- MODAL ULASAN WEB -->
+    <div id="modal-ulasan" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-ulasan')">&times;</span>
+            <h2 class="modal-title">Ulasan Web</h2>
+            
+            <!-- Kirim Email menggunakan Formspree -->
+            <!-- PENTING: Ganti 'YOUR_FORMSPREE_ID' dengan ID dari formspree.io kamu -->
+            <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" onsubmit="handleReviewSubmit(event)">
+                <label>Nama Anda:</label>
+                <input type="text" id="reviewer-name" name="name" required placeholder="Masukkan nama">
+                
+                <label>Pesan / Ulasan:</label>
+                <textarea id="reviewer-msg" name="message" rows="3" required placeholder="Tuliskan ulasan kamu..."></textarea>
+                
+                <button type="submit" class="btn-submit">Kirim Ulasan</button>
+            </form>
+
+            <h3 style="margin-top: 20px; margin-bottom: 10px;">Ulasan Pengguna:</h3>
+            <div id="reviews-list">
+                <!-- List ulasan disimpan & ditampilkan via Javascript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Control Functions
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        // Fitur Motivasi
+        const quotes = [
+            '"Maka sesungguhnya bersama kesulitan ada kemudahan." (QS. Al-Insyirah: 5)',
+            '"Jangan berduka cita, sesungguhnya Allah ada bersama kita." (QS. At-Taubah: 40)',
+            '"Dunia ini adalah perhiasan, dan sebaik-baik perhiasan dunia adalah wanita shalehah." (HR. Muslim)',
+            '"Barangsiapa yang menempuh jalan untuk mencari ilmu, maka Allah akan mudahkan baginya jalan menuju surga." (HR. Muslim)'
+        ];
+        function generateQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quote-box').innerText = quotes[randomIndex];
+        }
+
+        // Fitur Buku Tulis (LocalStorage)
+        document.getElementById('note-input').value = localStorage.getItem('userNote') || '';
+        function saveNote() {
+            const noteContent = document.getElementById('note-input').value;
+            localStorage.setItem('userNote', noteContent);
+            alert('Catatan berhasil disimpan!');
+        }
+
+        // Fitur Menabung (LocalStorage)
+        let totalUang = parseInt(localStorage.getItem('userMoney')) || 0;
+        document.getElementById('total-uang').innerText = totalUang.toLocaleString('id-ID');
+
+        function tambahUang() {
+            const input = document.getElementById('input-uang');
+            const nilai = parseInt(input.value);
+            if (!isNaN(nilai) && nilai > 0) {
+                totalUang += nilai;
+                localStorage.setItem('userMoney', totalUang);
+                document.getElementById('total-uang').innerText = totalUang.toLocaleString('id-ID');
+                input.value = '';
+            }
+        }
+
+        function resetUang() {
+            totalUang = 0;
+            localStorage.setItem('userMoney', 0);
+            document.getElementById('total-uang').innerText = '0';
+        }
+
+        // Fitur Simpan & Tampil Ulasan (Bisa dilihat publik lokal)
+        function loadReviews() {
+            const reviews = JSON.parse(localStorage.getItem('webReviews')) || [
+                { name: "Admin", msg: "Selamat datang! Silakan tinggalkan ulasan Anda." }
+            ];
+            const listContainer = document.getElementById('reviews-list');
+            listContainer.innerHTML = '';
+            reviews.forEach(r => {
+                const item = document.createElement('div');
+                item.className = 'review-item';
+                item.innerHTML = `<strong>${r.name}</strong><p>${r.msg}</p>`;
+                listContainer.appendChild(item);
+            });
+        }
+
+        function handleReviewSubmit(e) {
+            const name = document.getElementById('reviewer-name').value;
+            const msg = document.getElementById('reviewer-msg').value;
+
+            // Simpan ke storage lokal agar muncul di layar
+            const reviews = JSON.parse(localStorage.getItem('webReviews')) || [];
+            reviews.unshift({ name: name, msg: msg });
+            localStorage.setItem('webReviews', JSON.stringify(reviews));
+
+            loadReviews();
+        }
+
+        // Inisialisasi Ulasan
+        loadReviews();
+    </script>
+</body>
+</html>
